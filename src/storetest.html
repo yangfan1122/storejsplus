@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>数据持久化测试</title>
+</head>
+
+<body>
+
+<div>
+	<input type="button" value="load test" onclick="loadtest()" />
+	<input type="button" value="clear console" onclick="clearconsole()" />
+</div>
+<div id="consolediv"></div>
+
+<script type="text/javascript" src="json.js"></script>
+<script type="text/javascript" src="store.js"></script>
+<script>
+//utils
+function l(_info)
+{
+	document.getElementById("consolediv").innerHTML += "<p>"+_info+"</p>";
+}
+function clearconsole()
+{
+	document.getElementById("consolediv").innerHTML = "";	
+}
+// //utils
+
+var perLen = 1024 * 31; //每组数据体积
+var totalLen = 1024 * 100; //测试数据体积
+var i;
+var data = "";
+var baseKey = "gitfListBaseKey";
+var timestamp = (new Date).getTime();
+var _datatemp = Math.floor(Math.random()*10).toString();
+l("数据："+_datatemp);
+for (i = 0; i < totalLen; i++)data += _datatemp; //测试数据
+
+l("生成测试数据耗时"+((new Date).getTime()-timestamp)+"ms");
+timestamp = (new Date).getTime();
+
+if (!store.isLocalStorageNameSupported()) {
+	var tempArr = [];
+	for (i = 0; i < Math.ceil(totalLen / perLen); i++){
+		tempArr.push({
+			"key" : baseKey + i,
+			"value" : ""
+		}); //分组
+	}
+	for (i = 0; i < totalLen; i++)tempArr[Math.floor(i / perLen)]["value"] += data.substr(i, 1); //每组赋值
+	for (i = 0; i < tempArr.length; i++) {
+		l("save, 第"+i+"组长度:"+tempArr[i]["value"].length);
+		store.userDataStorageName = tempArr[i]["userDataStorageName"] = "userDataStorageName"+i;
+		store.set(tempArr[i]["key"], tempArr[i]["value"]); //存
+	}
+} else {
+	store.set(baseKey, data);
+}
+
+l("存储耗时:"+((new Date).getTime()-timestamp)+"ms");
+
+function loadtest()
+{
+	if (store.isLocalStorageNameSupported())
+	{
+		l("数据长度:"+store.get(baseKey).length);
+	}
+	else
+	{
+		for(var i=0;i<tempArr.length;i++)
+		{
+			store.userDataStorageName = tempArr[i]["userDataStorageName"];
+			l("load, 第"+i+"组长度:"+store.get(tempArr[i]["key"]).length);
+		}	
+	}
+}
+</script>
+
+
+</body>
+</html>
