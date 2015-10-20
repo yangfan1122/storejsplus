@@ -64,4 +64,4 @@ storage.load(store.userDataStorageName)
 ``` javascript
 <meta charset="utf-8">
 ```
-页面charset为utf-8，而utf-8又是基于Unicode产生的，所以测试数据一个字母为16位、2个字节。故字符串长度×2即为数据体积。
+待完善。
