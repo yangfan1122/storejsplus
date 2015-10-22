@@ -64,4 +64,25 @@ storage.load(store.userDataStorageName)
 ``` javascript
 <meta charset="utf-8">
 ```
-待完善。
+utf-8是在Unicode基础上衍生出的可变长度字符编码，一个字符可占1-4个字节。
+
+规则：
+<div>
+  <p> Unicode符号范围   |        UTF-8编码方式<br>
+    (十六进制)          |              （二进制）<br>
+    --------------------+---------------------------------------------<br>
+    0000 0000-0000 007F | 0xxxxxxx<br>
+    0000 0080-0000 07FF | 110xxxxx 10xxxxxx<br>
+    0000 0800-0000 FFFF | 1110xxxx 10xxxxxx 10xxxxxx<br>
+    0001 0000-0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</p>
+  <p>如果一个字节的第一位是0，则这个字节单独就是一个字符；如果第一位是1，则连续有多少个1，就表示当前字符占用多少个字节。</p>
+</div>
+
+###测试
+在文本文件中使用UTF-8编码。
+
+var s = "一";
+s.charCodeAt(0).toString(16)为4e00，根据上表，“一”占3字节。
+
+utf-8有一个“头”，根据头编辑器选择合适的编码显示。例二个汉字“一二”，16进制查看为“EF BB BF E4 B8 80 E4 BA  8C ”，头3字节、一3字节、二3字节，共9字节。
+
