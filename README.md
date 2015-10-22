@@ -52,7 +52,7 @@ userDate的存储上限却很麻烦，[详见](https://msdn.microsoft.com/en-us/
 ``` javascript
 storage.load(store.userDataStorageName)
 ```
-这样才会在用户本地生成相应的物理文件来存储数据。
+这样才会在用户本地生成相应的物理文件来存储数据。注意：不要轻易删除userdata的物理文件，否则浏览器可能报错，需要通过清IE缓存（有时候还需要重启电脑，原因未知，但确实解决了问题）解决。
 
 ###跨目录访问
 跨目录暂时没用到，userDate可通过window.name处理，webStorage可通过Communication APIs处理，这里不再细说。
